@@ -12,7 +12,8 @@ import { renderMoney } from '../../constants/renderConvert';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, NavLink } from "react-router-dom";
 
-function TableProducts({ listProduct, listCategory, listType, onEdit, onDelete, setFilter, filter, match }) {
+function TableProducts({ listProduct, listCategory, listType,
+  onEdit, onDelete, setFilter, filter, match, listColor }) {
   const totalPage = useSelector((state) => state.manageTotalProduct.item);
   const columns = [
     {
@@ -115,11 +116,20 @@ function TableProducts({ listProduct, listCategory, listType, onEdit, onDelete, 
         <div>
           {
             Array.isArray(record) && record.length > 0 && record.map((item, index) => {
+              console.log(item);
               return (
                 <>
                   <div key={index} className="info-size">
                     <p>Size: {item.size}</p>
-                    <p>Màu: {item.color}</p>
+                    {
+                      listColor.map((itemColor) => {
+                        if (itemColor._id === item.colorProductId) {
+                          return (
+                            <p>Màu: {itemColor.name}</p>
+                          );
+                        }
+                      })
+                    }
                     <p>Số lượng: {item.howNumber}</p>
                   </div>
                 </>

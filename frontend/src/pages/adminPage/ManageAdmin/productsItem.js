@@ -224,6 +224,7 @@ function ProductsItem({ match }) {
                     setFilter={setFilter}
                     filter={filter}
                     match={match}
+                    listColor={listColor}
                   />
                 </div>
               </div>

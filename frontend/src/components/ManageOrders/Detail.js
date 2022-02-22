@@ -62,6 +62,7 @@ function DetailOrders({ match, history }) {
                         }
                       }
                     }
+                    // console.log(Object.fromEntries(form_data));
                     dispatch(actGetProduct.actUpdateProductRequest(form_data, itemList._id))
                     dispatch(actOrder.actUpdateOrderProductRequest(newValue, newValue._id, setInitialValue));
                   }

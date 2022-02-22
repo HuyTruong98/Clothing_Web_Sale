@@ -54,7 +54,7 @@ function Home({ match }) {
 
   const newArrHoodie = [];
   listProduct.filter((item) => {
-    if (item.categoryId === '61800c903202f218c8f921e0' && item.typeProductId === '61816c0b529ae973cc29e34b' && item.dealHot === '') {
+    if (item.categoryId === '61800c903202f218c8f921e0' && item.typeProductId === '6186becdb2ad9e88fcf35613' && item.dealHot === '') {
       newArrHoodie.push(item);
     }
   });
