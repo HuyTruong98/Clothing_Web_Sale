@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/alt-text */
@@ -32,6 +33,10 @@ function Home({ match }) {
   const listCategory = useSelector((state) => state.manageCategory.list);
   const [loading, setLoading] = useState(false);
   const [load, setLoad] = useState(undefined);
+  const [filter, setFilter] = useState({
+    createdAt: -1,
+    price: 0,
+  });
   // hot deal 1
   const newArr1 = listProduct.filter((item) => item.dealHot !== '').map((itemCount, indexCount) => indexCount === 0 ? itemCount.dealHot : '');
   const dayDown1 = newArr1.findIndex((item) => item !== '');
@@ -70,7 +75,7 @@ function Home({ match }) {
   useEffect(() => {
     window.scrollTo(0, 0);
     setTimeout(() => {
-      dispatch(actFetchProducts.actFetchProductsRequest());
+      dispatch(actFetchProducts.actFetchProductsRequest(filter));
       setLoad(true);
     }, 1500);
   }, []);

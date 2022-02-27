@@ -33,6 +33,8 @@ function DetailOrders({ match, history }) {
                 if (itemFilter.colorProductId === itemOrder.colorProductId && itemFilter.size === itemOrder.size) {
                   if (itemList.sizeAndColorAndNumber[indexFilter].howNumber === 0) {
                     manageAlertError(Message.CAP_NHAT_KHO_THAT_BAI, `Tên sản phẩm: ${itemList.name}`)
+                  } else if (itemFilter.howNumber < itemOrder.quantily) {
+                    manageAlertError(Message.CAP_NHAT_KHO_KHONG_DU_SO_LUONG, `Tên sản phẩm: ${itemList.name}`)
                   } else {
                     itemList.sizeAndColorAndNumber[indexFilter].howNumber = itemFilter.howNumber - itemOrder.quantily;
                     listProduct[indexFilter] = itemList;
@@ -63,6 +65,7 @@ function DetailOrders({ match, history }) {
                       }
                     }
                     // console.log(Object.fromEntries(form_data));
+                    console.log(itemList);
                     dispatch(actGetProduct.actUpdateProductRequest(form_data, itemList._id))
                     dispatch(actOrder.actUpdateOrderProductRequest(newValue, newValue._id, setInitialValue));
                   }
@@ -71,6 +74,8 @@ function DetailOrders({ match, history }) {
             }
           });
         });
+    } else {
+      dispatch(actOrder.actUpdateOrderProductRequest(newValue, newValue._id, setInitialValue));
     }
   }
 

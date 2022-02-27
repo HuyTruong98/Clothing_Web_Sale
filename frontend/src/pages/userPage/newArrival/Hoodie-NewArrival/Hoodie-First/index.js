@@ -47,7 +47,7 @@ function HoodieFirst({ newArrHoodie }) {
                       <br />
                       <Link
                         to={{
-                          pathname: `San-pham/${itemFirst._id}`,
+                          pathname: `${API.PRODUCT}/${itemFirst._id}`,
                         }}
                       >
                         {/* <button onClick={() => addToCardSame(item)}> */}
@@ -68,7 +68,7 @@ function HoodieFirst({ newArrHoodie }) {
                       <Link
                         style={{ color: 'black', fontWeight: '500' }}
                         to={{
-                          pathname: `San-pham/${itemFirst._id}`,
+                          pathname: `${API.PRODUCT}/${itemFirst._id}`,
                         }}
                       >
                         {itemFirst.name}

@@ -9,6 +9,7 @@ export const DANG_KI_THANH_CONG = 'Đăng kí thành công !';
 export const DANG_NHAP_THAT_BAI = 'Đăng nhập thất bại (*SAI EMAIL HOẶC MẬT KHẨU)!';
 export const CAP_NHAT_KHO_THANH_CONG = 'Cập nhật kho thành công !';
 export const CAP_NHAT_KHO_THAT_BAI = 'Hết hàng (Vui lòng kiểm tra số lượng trong kho) !';
+export const CAP_NHAT_KHO_KHONG_DU_SO_LUONG = 'Không đủ số lượng (Vui lòng kiểm tra số lượng trong kho) 😘!';
 
 // Giỏ hàng
 export const THEM_VAO_GIO_HANG_THANH_CONG = "Thêm vào giỏ hàng thành công ❤️!";

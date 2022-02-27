@@ -136,7 +136,7 @@ function DealHot({ countdownTimestampMS, listProduct }) {
                     <div className="card-hot-deal-giohang">
                       <Link
                         to={{
-                          pathname: `San-pham/${hotDealItem._id}`,
+                          pathname: `${API.PRODUCT}/${hotDealItem._id}`,
                         }}
                       >
                         <Button style={{ height: "50px", border: '2px solid #ebebeb', width: '220px' }}>
@@ -160,7 +160,7 @@ function DealHot({ countdownTimestampMS, listProduct }) {
                         hotDealItem.imgProduct.map((item, index) => {
                           if (index === 0) {
                             return <Link to={{
-                              pathname: `San-pham/${hotDealItem._id}`,
+                              pathname: `${API.PRODUCT}/${hotDealItem._id}`,
                             }}><img src={`${API.serverImg}/${item.imgUrl}`} width="90%" height="100%" /></Link>;
                           }
                         })}

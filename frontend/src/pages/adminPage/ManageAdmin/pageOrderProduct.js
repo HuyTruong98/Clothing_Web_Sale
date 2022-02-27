@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-rainbow-components';
+// import { Button } from 'react-rainbow-components';
 import { useDispatch, useSelector } from 'react-redux';
 import TableOrders from '../../../components/ManageOrders/Table';
 import * as actOrder from '../../../redux/actions/manageOrderListCart/actManageOrderListCart';
@@ -24,6 +24,18 @@ function PageOrderProduct({ match }) {
   const [loading, setLoading] = useState(undefined);
   const listColor = useSelector((state) => state.manageColor.list);
   const [count, setCount] = useState()
+
+  function onDelete(id) {
+    dispatch(actOrder.actDeleteOrderCartRequest(id));
+    const index = listOrder.findIndex((x) => x._id === id);
+    const newArrList = [...listOrder];
+    newArrList.splice(index, 1);
+    setListOrder([...newArrList]);
+  }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,12 +69,12 @@ function PageOrderProduct({ match }) {
                   <div className="card shadow mb-4">
                     <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                       <h6 className="m-0 font-weight-bold ">Danh sách đơn hàng</h6>
-                      <Button
+                      {/* <Button
                         // onClick={() => openForm()}
                         style={{ height: '40px' }}
                       >
                         <i className="fas fa-plus" />
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                   <TableOrders
@@ -71,6 +83,7 @@ function PageOrderProduct({ match }) {
                     city={city}
                     match={match}
                     count={count}
+                    onDelete={onDelete}
                   />
                 </div>
               </div>

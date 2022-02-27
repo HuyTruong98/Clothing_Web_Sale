@@ -46,7 +46,7 @@ function TableCart({ listCart, listColor }) {
                     <NavLink
                       style={{ color: 'black' }}
                       to={{
-                        pathname: `San-pham/${itemCart._id}`,
+                        pathname: `${API.PRODUCT}/${itemCart._id}`,
                       }}
                     >
                       {itemCart.name}

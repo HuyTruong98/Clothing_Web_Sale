@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable no-console */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-plusplus */
@@ -20,9 +21,10 @@ const getCountProduct = async (query) => {
   return Products.countDocuments(query);
 };
 
-const getAllProducts = async (perPage, page, query) => {
+const getAllProducts = async (perPage, page, query, createdAt, price) => {
+  const sortProduct = price.price ? price : createdAt;
   const count = await getCountProduct(query);
-  const products = await Products.find(query).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+  const products = await Products.find(query).sort(sortProduct).skip((perPage * page) - perPage).limit(perPage);
   return { total: Math.ceil(count), data: products };
 };
 

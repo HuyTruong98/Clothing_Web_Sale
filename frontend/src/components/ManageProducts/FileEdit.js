@@ -1,3 +1,4 @@
+/* eslint-disable no-const-assign */
 /* eslint-disable no-array-constructor */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable jsx-a11y/alt-text */
@@ -14,31 +15,19 @@ function FileEdit({
   setArrImgProductObject, arrImgProductObject, setCountDate,
 }) {
   const newArr = initialValues.imgProduct;
-  function handleRemoveFile(indexImg) {
-    const newImg = [...arrImgProductObject];
-    initialValues.imgProduct.map((item, index) => {
-      if (index === indexImg) {
-        newImg.splice(indexImg, 1, item);
-      }
-    });
-    setArrImgProductObject(newImg);
-    console.log('abc', newImg);
-  }
 
   function handleChangeFile(e, indexImg) {
     getNameFile(e, indexImg);
     setFile([...file, e.file]);
   }
   function onDeleteRequest(indexImg, value) {
-    // const newProductObject = [...arrImgProductObject];
-    // newProductObject.map((item, index) => {
-    //   if (index === indexImg) {
-    //     newProductObject.splice(indexImg, 1, { ...item, imgUrl: '' });
-    //   }
-    // })
-    // initialValues = { ...initialValues, imgProduct: newProductObject }
-    // console.log('initialValues', initialValues);
-    // console.log(newProductObject);
+    newArr.filter((itemChange, indexChange) => {
+      if (indexChange === indexImg && value._id === itemChange._id) {
+        itemChange.imgUrl = '';
+      }
+    });
+    initialValues.imgProduct = [...newArr];
+    setArrImgProductObject([...arrImgProductObject]);
   }
 
   function range(start, end) {
@@ -49,11 +38,13 @@ function FileEdit({
     return result;
   }
 
+  // DealHot
   function disabledDate(current) {
     // Can not select days before today and today
     return current && current < moment().endOf('day');
   }
 
+  // DealHot
   function disabledDateTime() {
     return {
       disabledHours: () => range(0, 24).splice(4, 20),
@@ -62,10 +53,12 @@ function FileEdit({
     };
   }
 
+  // DealHot Day
   function onChangeDate(value, dateString) {
     setCountDate(dateString);
   }
 
+  // DealHot
   function onDeleteDealHot(value) {
     if (value) {
       console.log(value);
@@ -73,6 +66,7 @@ function FileEdit({
     }
   }
 
+  // Best Seller
   function handleClickBestSeller(value) {
     if (value.length === 1) {
       value.map((item) => {
@@ -130,42 +124,38 @@ function FileEdit({
                 <Form.Item
                   name="imgUrl"
                 >
-                  <Upload
-                    listType="picture"
-                    onChange={(e) => handleChangeFile(e, indexImg)}
-                    accept="image/png, image/gif, image/jpeg"
-                    maxCount={1}
-                    onRemove={() => handleRemoveFile(indexImg)}
-                  >
-                    <Button style={{ marginRight: '30px' }} type="link" icon={<EditOutlined />} />
-                  </Upload>
-
                   {
-                    file.length > 0
+                    itemImg.imgUrl !== ''
                       ?
-                      ''
+                      (
+                        <>
+                          <Popconfirm
+                            placement="topLeft"
+                            title={`${Message.BAN_CO_MUON_XOA_ANH}Ảnh slide ${indexImg} !`}
+                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                            // eslint-disable-next-line no-underscore-dangle
+                            onConfirm={() => onDeleteRequest(indexImg, itemImg)}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <Button style={{ marginRight: '30px' }} type="link" icon={<DeleteOutlined style={{ color: 'red' }} />} />
+                          </Popconfirm>
+                        </>
+                      )
                       :
                       (
-                        itemImg.imgUrl !== ''
-                          ?
-                          (
-                            <Popconfirm
-                              placement="topLeft"
-                              title={`${Message.BAN_CO_MUON_XOA_ANH}Ảnh slide ${indexImg} !`}
-                              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                              // eslint-disable-next-line no-underscore-dangle
-                              onConfirm={() => onDeleteRequest(indexImg, initialValues)}
-                              okText="Yes"
-                              cancelText="No"
-                            >
-                              <Button style={{ marginRight: '30px' }} type="link" icon={<DeleteOutlined style={{ color: 'red' }} />} />
-                            </Popconfirm>
-                          )
-                          :
-                          ''
+                        <>
+                          <Upload
+                            listType="picture"
+                            onChange={(e) => handleChangeFile(e, indexImg)}
+                            accept="image/png, image/gif, image/jpeg"
+                            maxCount={1}
+                          >
+                            <Button style={{ marginRight: '30px' }} type="link" icon={<EditOutlined />} />
+                          </Upload>
+                        </>
                       )
                   }
-
                 </Form.Item>
               </Descriptions>
             );

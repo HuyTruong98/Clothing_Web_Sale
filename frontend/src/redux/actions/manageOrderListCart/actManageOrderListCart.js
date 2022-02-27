@@ -56,3 +56,13 @@ export function actUpdateOrderProductRequest(value, id, setInitialValue) {
     });
   };
 }
+
+export function actDeleteOrderCartRequest(id) {
+  return (dispatch) => {
+    return callApi(`${api.server}/oderCart/${id}`, 'DELETE', null).then((res) => {
+      if (res) {
+        manageAlert(Message.XOA_THANH_CONG);
+      }
+    });
+  };
+}

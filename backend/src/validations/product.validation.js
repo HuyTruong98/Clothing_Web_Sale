@@ -24,6 +24,8 @@ const getAllProduct = {
     limit: Joi.number().integer(),
     dealHot: Joi.any(),
     bestSeller: Joi.string(),
+    createdAt: Joi.number(),
+    price: Joi.number(),
   }),
 };
 

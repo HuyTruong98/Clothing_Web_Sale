@@ -431,7 +431,7 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
                         <div className="name-size">
                           <Link
                             to={{
-                              pathname: `San-pham/${item._id}`,
+                              pathname: `${API.PRODUCT}/${item._id}`,
                             }}
                             style={{ color: 'black' }}
                           >
@@ -475,7 +475,7 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
                         <div className="name-size">
                           <Link
                             to={{
-                              pathname: `San-pham/${item._id}`,
+                              pathname: `${API.PRODUCT}/${item._id}`,
                             }}
                             style={{ color: 'black' }}
                           >

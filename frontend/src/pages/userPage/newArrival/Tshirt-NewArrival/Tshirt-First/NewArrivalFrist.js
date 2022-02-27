@@ -48,7 +48,7 @@ function NewArrivalFrist({ newArrTshirt }) {
                         <br />
                         <Link
                           to={{
-                            pathname: `San-pham/${itemFirst._id}`,
+                            pathname: `${API.PRODUCT}/${itemFirst._id}`,
                           }}
                         >
                           {/* <button onClick={() => addToCardSame(item)}> */}
@@ -68,7 +68,7 @@ function NewArrivalFrist({ newArrTshirt }) {
                       <Link
                         style={{ color: 'black', fontWeight: '500' }}
                         to={{
-                          pathname: `San-pham/${itemFirst._id}`,
+                          pathname: `${API.PRODUCT}/${itemFirst._id}`,
                         }}
                       >
                         <a>

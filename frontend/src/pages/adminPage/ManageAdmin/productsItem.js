@@ -36,6 +36,8 @@ function ProductsItem({ match }) {
   const [filter, setFilter] = useState({
     page: 1,
     limit: 5,
+    createdAt: -1,
+    price: 0,
   });
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(undefined);
@@ -50,7 +52,6 @@ function ProductsItem({ match }) {
     setArrImgProductObject([...temp]);
   }
 
-  // console.log('abc', arrImgProductObject);
   function onSave(value) {
     if (currentId) {
       const dataUpdate = { ...value, _id: currentId, imgProduct: arrImgProductObject, dealHot: countDate, bestSeller: bestSeller };
@@ -67,6 +68,8 @@ function ProductsItem({ match }) {
       if (arrImgProductObject) {
         arrImgProductObject.filter((itemFile) => {
           if (itemFile.imgUrl?.type === 'image/jpeg' || itemFile.imgUrl?.type === 'image/jpg' || itemFile.imgUrl?.type === 'image/png') {
+            form_data.append('imgUrl', itemFile.imgUrl);
+          } else {
             form_data.append('imgUrl', itemFile.imgUrl);
           }
         });
@@ -93,6 +96,7 @@ function ProductsItem({ match }) {
           }
         }
       }
+      // console.log(Object.fromEntries(form_data));
       dispatch(actProduct.actUpdateProductRequest(form_data, dataUpdate._id));
     } else {
       const form_data = new FormData();

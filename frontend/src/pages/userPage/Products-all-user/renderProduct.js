@@ -1,34 +1,51 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable array-callback-return */
 import React from 'react';
-import { Modal, Drawer, Space, Card, Image } from "antd";
-import { renderMoney } from '../../../../../constants/renderConvert';
+import { Row, Col, Modal, Card, Image, Button, Pagination } from 'antd';
+import { renderMoney } from '../../../constants/renderConvert';
+import SkeletonBestSeller from '../Best-Seller/SkeletonBestSeller';
+import * as API from '../../../constants/url';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
-import * as API from '../../../../../constants/url';
 
-function NewArrivalLast({ newArrTshirt }) {
+function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
+  function handleChangePagination(page, pageSize) {
+    setFilter((filter) => ({ ...filter, page }))
+  }
   return (
     <>
       {
-        newArrTshirt.map((itemLast, indexLast) => {
-          if (indexLast < 5 && indexLast > 0) {
-            return (
-              <>
-                <Space>
-                  <div className="all-last-Tshirt">
+        listProduct.length === 0
+          ?
+          (
+            <>
+              <SkeletonBestSeller />
+            </>
+          )
+          :
+          (
+            listProduct.map((itemProduct, indexProduct) => {
+              return (
+                <div key={indexProduct} className="col-xl-3 col-lg-3 col-6">
+                  <div className="card-best-seller">
                     <Card
-                      style={{ width: 220 }}
                       bordered={false}
+                      style={{ width: 260, marginRight: '25px', marginBottom: '50px' }}
                       cover={
-                        Array.isArray(itemLast && itemLast.imgProduct) &&
-                        itemLast.imgProduct.length > 0 &&
-                        itemLast.imgProduct.map((itemImg, indexImg) => {
+                        Array.isArray(itemProduct && itemProduct.imgProduct) &&
+                        itemProduct.imgProduct.length > 0 &&
+                        itemProduct.imgProduct.map((itemImg, indexImg) => {
                           if (indexImg === 0) {
                             return (
                               <div className="wrapper-2">
-                                <div className="big-image">
+                                <div className="big-image" style={{ height: '310px' }}>
+                                  {
+                                    itemProduct.priceSale !== 0 ?
+                                      <div className="percent-reduction">-{Math.ceil(100 - ((itemProduct.priceSale) / (itemProduct.price) * 100))}%</div>
+                                      :
+                                      ""
+                                  }
                                   <img src={`${API.serverImg}/${itemImg.imgUrl}`} width="100%" height="100%" />
                                   <div class="info-T-shirt-all">
                                     <Link
@@ -49,15 +66,15 @@ function NewArrivalLast({ newArrTshirt }) {
                                     <br />
                                     <Link
                                       to={{
-                                        pathname: `${API.PRODUCT}/${itemLast._id}`,
-                                        id: itemLast._id,
+                                        pathname: `${API.PRODUCT}/${itemProduct._id}`,
+                                        // id: item.id,
                                       }}
                                     >
                                       {/* <button onClick={() => addToCardSame(item)}> */}
                                       <button>
                                         <i
                                           style={{ fontSize: "23px" }}
-                                          class="fa fa-shopping-cart"
+                                          className="fa fa-shopping-cart"
                                           aria-hidden="true"
                                         ></i>
                                       </button>
@@ -65,32 +82,39 @@ function NewArrivalLast({ newArrTshirt }) {
                                   </div>
                                 </div>
                               </div>
-                            )
+                            );
                           }
                         })
                       }
                     >
-                      <div className="card-product-list">
-                        <div className="product-info">
+                      <div className="card-best-seller-title">
+                        <div className="best-seller-info">
                           <a>
                             <Link
                               style={{ color: 'black' }}
                               to={{
-                                pathname: `${API.PRODUCT}/${itemLast._id}`,
+                                pathname: `${API.PRODUCT}/${itemProduct._id}`,
                               }}
                             >
-                              {itemLast.name}
+                              {itemProduct.name}
                             </Link>
                           </a>
                         </div>
-                        <div className="product-price">
-                          <strong>{renderMoney(itemLast.price)}</strong>
+                        <div className="product-price-best-seller">
+                          {
+                            itemProduct.priceSale ?
+                              <>
+                                <strong style={{ fontSize: '16px' }}>{renderMoney(itemProduct.priceSale)}</strong> &emsp;
+                                <strike>{renderMoney(itemProduct.price)}</strike>
+                              </> :
+                              <strong style={{ fontSize: '16px' }}>{renderMoney(itemProduct.price)}</strong>
+                          }
                         </div>
                         <div className="select-img">
                           {
-                            Array.isArray(itemLast && itemLast.imgProduct) &&
-                            itemLast.imgProduct.length > 0 &&
-                            itemLast.imgProduct.map((itemImg, indexImg) => {
+                            Array.isArray(itemProduct && itemProduct.imgProduct) &&
+                            itemProduct.imgProduct.length > 0 &&
+                            itemProduct.imgProduct.map((itemImg, indexImg) => {
                               if (indexImg < 4 && itemImg.imgUrl !== '') {
                                 return (
                                   <Image
@@ -106,14 +130,21 @@ function NewArrivalLast({ newArrTshirt }) {
                       </div>
                     </Card>
                   </div>
-                </Space>
-              </>
-            )
-          }
-        })
+                </div>
+              );
+            })
+          )
       }
+      <div className="pagination-all-product">
+        <Pagination
+          total={totalPage}
+          pageSize={filter.limit}
+          current={filter.page}
+          onChange={(page, pageSize) => handleChangePagination(page, pageSize)}
+        />
+      </div>
     </>
   );
 }
 
-export default NewArrivalLast;
+export default RenderProduct;

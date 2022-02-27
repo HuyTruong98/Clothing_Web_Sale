@@ -11,7 +11,7 @@ import { renderMoney } from '../../constants/renderConvert';
 import * as ApiImg from '../../constants/url';
 import { BrowserRouter as Router, NavLink } from "react-router-dom";
 
-function TableOrders({ listOrder, city, match, listColor, count }) {
+function TableOrders({ listOrder, city, match, listColor, count, onDelete }) {
   const listUser = useSelector((state) => state.manageUser.list);
   const columns = [
     {
@@ -157,6 +157,10 @@ function TableOrders({ listOrder, city, match, listColor, count }) {
     return <span>0{record.phoneNumber}</span>
   }
 
+  function onDeleteRequest(id) {
+    onDelete(id);
+  }
+
   function actionRender(record) {
     return (
       <>
@@ -167,7 +171,7 @@ function TableOrders({ listOrder, city, match, listColor, count }) {
               title={Message.BAN_CO_MUON_XOA}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               // eslint-disable-next-line no-underscore-dangle
-              // onConfirm={() => onDeleteRequest(record._id)}
+              onConfirm={() => onDeleteRequest(record._id)}
               okText="Yes"
               cancelText="No"
             >

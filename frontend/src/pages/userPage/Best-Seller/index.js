@@ -69,7 +69,7 @@ function BestSeller({ listProduct }) {
                                             <br />
                                             <Link
                                               to={{
-                                                pathname: `San-pham/${item._id}`,
+                                                pathname: `${API.PRODUCT}/${item._id}`,
                                                 // id: item.id,
                                               }}
                                             >
@@ -96,7 +96,7 @@ function BestSeller({ listProduct }) {
                                     <Link
                                       style={{ color: 'black' }}
                                       to={{
-                                        pathname: `San-pham/${item._id}`,
+                                        pathname: `${API.PRODUCT}/${item._id}`,
                                       }}
                                     >
                                       {item.name}
@@ -123,7 +123,6 @@ function BestSeller({ listProduct }) {
                                     })
                                   }
                                 </div>
-
                               </div>
                             </Card>
                           </div>

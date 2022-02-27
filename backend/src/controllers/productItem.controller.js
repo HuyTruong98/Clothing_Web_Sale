@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable prefer-const */
 /* eslint-disable prefer-template */
 /* eslint-disable no-undef */
@@ -11,6 +12,8 @@ const Products = require('../models/productItem.models');
 
 const getAllProduct = catchAsync(async (req, res) => {
   const count = Products.countDocuments;
+  let createdAt = { createdAt: req.query.createdAt };
+  let price = { price: req.query.price };
   let perPage = req.query.limit || count;
   let page = req.query.page || 1;
   let filter = pick(req.query, ['categoryId', 'typeProductId', 'name', 'dealHot']);
@@ -32,7 +35,7 @@ const getAllProduct = catchAsync(async (req, res) => {
     query.dealHot = { $regex: filter.dealHot, $options: 'i' };
   }
 
-  const allProduct = await productService.getAllProducts(perPage, page, query);
+  const allProduct = await productService.getAllProducts(perPage, page, query, createdAt, price);
   res.send(allProduct);
 });
 
