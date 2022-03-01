@@ -7,13 +7,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import * as URL from '../../../constants/url';
 import * as actProduct from '../../../redux/actions/managerProducts/actManageProducts';
-import { Tabs } from 'antd';
+import { Tabs, Image } from 'antd';
 import ReactImageMagnify from 'react-image-magnify';
 import * as API from '../../../constants/url';
 import Slider from "react-slick";
 import Control_Cart from './Control-Cart';
 import Lottie from 'react-lottie';
 import * as location from '../../../JSON/63274-loading-animation.json';
+import CommentProduct from './Comment-Product';
+import ProductSeen from '../product-seen';
+import ProductSame from './Product-Same';
 
 const defaultOptions = {
   loop: true,
@@ -123,10 +126,11 @@ function DetailProduct({ match }) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(actProduct.actGetProductByIdRequest(id));
     setTimeout(() => {
-      dispatch(actProduct.actGetProductByIdRequest(id));
       setLoading(true);
     }, 1000);
+    setSelectImg();
   }, [id]);
   return (
     <>
@@ -182,34 +186,40 @@ function DetailProduct({ match }) {
                   <div className="container">
                     <Tabs defaultActiveKey="1" centered>
                       <TabPane tab="Thông tin sản phẩm" key="1">
-                        {/* <div className="thongtinimage">
-                  {
-                    Array.isArray(itemDetail && itemDetail.img) && itemDetail.img.length > 0 &&
-                    itemDetail.img.map((item, index) => {
-                      if (item) {
-                        return (
-                          <Image src={item} key={index} width="100%" />
-                        )
-                      }
-                    })
-                  }
-                </div> */}
+                        <div className="infomation-product">
+                          {
+                            Array.isArray(productId && productId.imgProduct) && productId.imgProduct.length > 0 &&
+                            productId.imgProduct.map((itemImg, indexImg) => {
+                              if (itemImg.imgUrl !== '') {
+                                return (
+                                  <Image src={`${API.serverImg}/${itemImg.imgUrl}`} key={indexImg} width="100%" />
+                                )
+                              }
+                            })
+                          }
+                        </div>
                       </TabPane>
                       <TabPane tab="Bản size" key="2">
-                        {/* <div className="thongtinSize">
-                  <img src="//bizweb.dktcdn.net/100/331/067/files/bang-size-yg-shop.png?v=1614019987979" width="100%" />
-                </div> */}
+                        <div className="infomation-product">
+                          <img src="//bizweb.dktcdn.net/100/331/067/files/bang-size-yg-shop.png?v=1614019987979" width="100%" />
+                        </div>
                       </TabPane>
                       <TabPane tab="Đánh giá sản phẩm" key="3">
-                        {/* <div className="thongtinSize">
-                  <CommentHere itemDetail={itemDetail} />
-                </div> */}
+                        <div className="infomation-product">
+                          <CommentProduct productId={productId} />
+                        </div>
                       </TabPane>
                     </Tabs>
                   </div>
+                  <div className="product-same">
+                    <ProductSame productId={productId} />
+                  </div>
+                  <div className="product-seen">
+                    <ProductSeen />
+                  </div>
+                  <div style={{ width: '100%', height: '100px' }}></div>
                 </div>
               </div>
-              <div style={{ height: '1000px' }}></div>
             </>
           )
       }

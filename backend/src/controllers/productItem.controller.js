@@ -16,7 +16,7 @@ const getAllProduct = catchAsync(async (req, res) => {
   let price = { price: req.query.price };
   let perPage = req.query.limit || count;
   let page = req.query.page || 1;
-  let filter = pick(req.query, ['categoryId', 'typeProductId', 'name', 'dealHot']);
+  let filter = pick(req.query, ['categoryId', 'typeProductId', 'name', 'dealHot', 'productCode']);
   let query = {};
 
   if (filter.categoryId) {
@@ -25,6 +25,10 @@ const getAllProduct = catchAsync(async (req, res) => {
 
   if (filter.categoryId && filter.typeProductId) {
     query.typeProductId = filter.typeProductId;
+  }
+
+  if (filter.productCode) {
+    query.productCode = filter.productCode;
   }
 
   if (filter.name) {

@@ -8,6 +8,7 @@ const docsRoute = require('./docs.route');
 const slidersRoute = require('./slider.route');
 const colorRoute = require('./color.route');
 const oderListCartRoute = require('./oderProduct.route');
+const commentRoute = require('./comment.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -46,6 +47,10 @@ const defaultRoutes = [
   {
     path: '/oderCart',
     route: oderListCartRoute,
+  },
+  {
+    path: '/comment',
+    route: commentRoute,
   },
 ];
 

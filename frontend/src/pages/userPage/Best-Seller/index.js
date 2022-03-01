@@ -61,7 +61,7 @@ function BestSeller({ listProduct }) {
                                               <button>
                                                 <i
                                                   style={{ fontSize: "23px" }}
-                                                  class="fa fa-eye"
+                                                  className="fa fa-eye"
                                                   aria-hidden="true"
                                                 ></i>
                                               </button>

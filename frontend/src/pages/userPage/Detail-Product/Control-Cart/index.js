@@ -64,7 +64,7 @@ function Control_Cart({ productId }) {
               (
                 <>
                   <strong>{renderMoney(productId && productId.priceSale)}</strong> &emsp;
-                  <strike>{renderMoney(productId && productId.price)} <div className="percent-detail">-{Math.ceil(100 - ((productId.priceSale) / (productId.price) * 100))}%</div></strike>
+                  <strike>{renderMoney(productId && productId.price)} <div className="percent-detail">-{Math.floor(100 - ((productId.priceSale) / (productId.price) * 100))}%</div></strike>
                 </>
               )
               :

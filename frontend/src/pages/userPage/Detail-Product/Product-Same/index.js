@@ -1,66 +1,47 @@
-/* eslint-disable no-const-assign */
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable array-callback-return */
-import React from 'react';
-import { Row, Col, Modal, Card, Image, Button, Pagination } from 'antd';
-import { renderMoney } from '../../../constants/renderConvert';
-import SkeletonBestSeller from '../Best-Seller/SkeletonBestSeller';
-import * as API from '../../../constants/url';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Card, Image } from 'antd';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actProduct from '../../../../redux/actions/managerProducts/actManageProducts';
+import * as API from '../../../../constants/url';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
+import { renderMoney } from '../../../../constants/renderConvert';
 
-function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
-  function handleChangePagination(page, pageSize) {
-    setFilter((filter) => ({ ...filter, page }))
-  }
+function ProductSame({ productId }) {
+  const dispatch = useDispatch();
+  const listProduct = useSelector((state) => state.manageProducts.list);
 
-
-  const addToCardSame = (value) => {
-    const dataSame = JSON.parse(localStorage.getItem('CARD_SAME')) ? JSON.parse(localStorage.getItem('CARD_SAME')) : [];
-    const arr = dataSame.find((item) => item.name === value.name && item._id === value._id);
-    if (arr) {
-      console.log('Already have a product');
-    } else {
-      dataSame.push(value);
-      localStorage.setItem('CARD_SAME', JSON.stringify(dataSame));
-    }
-  }
-  return (
-    <>
-      {
-        listProduct.length === 0
-          ?
-          (
-            <>
-              <SkeletonBestSeller />
-            </>
-          )
-          :
-          (
-            listProduct.map((itemProduct, indexProduct) => {
-              return (
-                <div key={indexProduct} className="col-xl-3 col-lg-3 col-6">
+  function renderProductSame() {
+    return listProduct.filter(item => item.categoryId === productId.categoryId && item.typeProductId === productId.typeProductId &&
+      item._id !== productId._id) ?
+      listProduct.filter(item => item.categoryId === productId.categoryId && item.typeProductId === productId.typeProductId &&
+        item._id !== productId._id).map((item, index) => {
+          if (index < 4) {
+            return (
+              <>
+                <div className="col-xl-3 col-lg-3 col-6">
                   <div className="card-best-seller">
                     <Card
                       bordered={false}
                       style={{ width: 260, marginRight: '25px', marginBottom: '50px' }}
                       cover={
-                        Array.isArray(itemProduct && itemProduct.imgProduct) &&
-                        itemProduct.imgProduct.length > 0 &&
-                        itemProduct.imgProduct.map((itemImg, indexImg) => {
+                        Array.isArray(item && item.imgProduct) && item.imgProduct.length > 0 &&
+                        item.imgProduct.map((itemImg, indexImg) => {
                           if (indexImg === 0) {
                             return (
                               <div className="wrapper-2">
                                 <div className="big-image" style={{ height: '310px' }}>
                                   {
-                                    itemProduct.priceSale !== 0 ?
-                                      <div className="percent-reduction">-{Math.floor(100 - ((itemProduct.priceSale) / (itemProduct.price) * 100))}%</div>
-                                      :
-                                      ""
+                                    item.priceSale !== 0 ?
+                                      <div className="percent-reduction">-{Math.floor(100 - ((item.priceSale) / (item.price) * 100))}%</div>
+                                      : ""
                                   }
                                   <img src={`${API.serverImg}/${itemImg.imgUrl}`} width="100%" height="100%" />
-                                  <div className="info-T-shirt-all">
+                                  <div class="info-T-shirt-all">
                                     <Link
                                       path={{
                                         // to: `product/${item.id}`,
@@ -79,11 +60,12 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
                                     <br />
                                     <Link
                                       to={{
-                                        pathname: `${API.PRODUCT}/${itemProduct._id}`,
+                                        pathname: `${API.PRODUCT}/${item._id}`,
                                         // id: item.id,
                                       }}
                                     >
-                                      <button onClick={() => addToCardSame(itemProduct)}>
+                                      {/* <button onClick={() => addToCardSame(item)}> */}
+                                      <button>
                                         <i
                                           style={{ fontSize: "23px" }}
                                           className="fa fa-shopping-cart"
@@ -95,7 +77,7 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
                                 </div>
                               </div>
                             );
-                          }
+                          };
                         })
                       }
                     >
@@ -105,28 +87,29 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
                             <Link
                               style={{ color: 'black' }}
                               to={{
-                                pathname: `${API.PRODUCT}/${itemProduct._id}`,
+                                pathname: `${API.PRODUCT}/${item._id}`,
                               }}
                             >
-                              {itemProduct.name}
+                              {item.name}
                             </Link>
                           </a>
                         </div>
                         <div className="product-price-best-seller">
                           {
-                            itemProduct.priceSale ?
+                            item.priceSale ?
                               <>
-                                <strong style={{ fontSize: '16px' }}>{renderMoney(itemProduct.priceSale)}</strong> &emsp;
-                                <strike>{renderMoney(itemProduct.price)}</strike>
-                              </> :
-                              <strong style={{ fontSize: '16px' }}>{renderMoney(itemProduct.price)}</strong>
+                                <strong style={{ fontSize: '16px' }}>{renderMoney(item.priceSale)}</strong> &emsp;
+                                <strike>{renderMoney(item.price)}</strike>
+                              </>
+                              :
+                              <strong style={{ fontSize: '16px' }}>{renderMoney(item.price)}</strong>
                           }
                         </div>
                         <div className="select-img">
                           {
-                            Array.isArray(itemProduct && itemProduct.imgProduct) &&
-                            itemProduct.imgProduct.length > 0 &&
-                            itemProduct.imgProduct.map((itemImg, indexImg) => {
+                            Array.isArray(item && item.imgProduct) &&
+                            item.imgProduct.length > 0 &&
+                            item.imgProduct.map((itemImg, indexImg) => {
                               if (indexImg < 4 && itemImg.imgUrl !== '') {
                                 return (
                                   <Image
@@ -143,20 +126,38 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
                     </Card>
                   </div>
                 </div>
-              );
-            })
-          )
-      }
-      <div className="pagination-all-product">
-        <Pagination
-          total={totalPage}
-          pageSize={filter.limit}
-          current={filter.page}
-          onChange={(page, pageSize) => handleChangePagination(page, pageSize)}
-        />
+              </>
+            );
+          };
+        })
+      :
+      ''
+  }
+
+  useEffect(() => {
+    const filter = {
+      categoryId: productId.categoryId,
+      typeProductId: productId.typeProductId,
+      page: 1,
+      limit: 10,
+      createdAt: -1,
+    };
+    dispatch(actProduct.actFetchProductsRequest(filter));
+  }, []);
+  return (
+    <>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12" style={{ marginBottom: '30px' }}>
+            <strong>SẢN PHẨM TƯƠNG TỰ</strong>
+          </div>
+        </div>
+        <div className="row">
+          {renderProductSame()}
+        </div>
       </div>
     </>
   );
 }
 
-export default RenderProduct;
+export default ProductSame;

@@ -11,6 +11,7 @@ import * as actProduct from '../../../redux/actions/managerProducts/actManagePro
 import SlickImageUser from '../slick-Image-user';
 import RenderProduct from './renderProduct';
 import { Row, Col, Modal, Card, Image, Button, Pagination } from 'antd';
+import ProductSeen from '../product-seen';
 
 function Products({ match }) {
   const dispatch = useDispatch();
@@ -95,8 +96,11 @@ function Products({ match }) {
             </div>
           </div>
         </div>
+        <div className="product-seen">
+          <ProductSeen />
+        </div>
+        <div style={{ width: '100%', height: '100px' }}></div>
       </div>
-
     </>
   );
 }

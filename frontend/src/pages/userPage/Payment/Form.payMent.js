@@ -440,7 +440,7 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
                             </a>
                           </Link>
                           <p>{item.size} / {renderSize(item.colorProductId)}</p>
-                          <p> {item.priceSale === 0 ? '' : `Giảm giá: ${Math.ceil(100 - ((item.priceSale) / (item.price) * 100))} %`}</p>
+                          <p> {item.priceSale === 0 ? '' : `Giảm giá: ${Math.floor(100 - ((item.priceSale) / (item.price) * 100))} %`}</p>
                         </div>
                         <div className="money-payment">
                           <p style={{ fontSize: '17px' }}>{renderMoney(item.priceSale ? item.priceSale : item.price)}</p>
@@ -484,7 +484,7 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
                             </a>
                           </Link>
                           <p>{item.size} / {renderSize(item.colorProductId)}</p>
-                          <p> {item.priceSale === 0 ? '' : `Giảm giá: ${Math.ceil(100 - ((item.priceSale) / (item.price) * 100))} %`}</p>
+                          <p> {item.priceSale === 0 ? '' : `Giảm giá: ${Math.floor(100 - ((item.priceSale) / (item.price) * 100))} %`}</p>
                         </div>
                         <div className="money-payment">
                           <p style={{ fontSize: '17px' }}>{renderMoney(item.priceSale ? item.priceSale : item.price)}</p>
