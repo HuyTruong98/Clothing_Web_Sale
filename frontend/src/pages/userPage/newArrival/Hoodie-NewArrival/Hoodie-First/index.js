@@ -3,11 +3,21 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable array-callback-return */
 import React from 'react';
-import { renderMoney } from '../../../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../../../constants/renderConvert';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
 import * as API from '../../../../../constants/url';
 
 function HoodieFirst({ newArrHoodie }) {
+  const addToCardSame = (value) => {
+    const dataSame = JSON.parse(localStorage.getItem('CARD_SAME')) ? JSON.parse(localStorage.getItem('CARD_SAME')) : [];
+    const arr = dataSame.find((item) => item.name === value.name && item._id === value._id);
+    if (arr) {
+      console.log('Already have a product');
+    } else {
+      dataSame.push(value);
+      localStorage.setItem('CARD_SAME', JSON.stringify(dataSame));
+    }
+  }
   return (
     <>
       {
@@ -47,11 +57,10 @@ function HoodieFirst({ newArrHoodie }) {
                       <br />
                       <Link
                         to={{
-                          pathname: `${API.PRODUCT}/${itemFirst._id}`,
+                          pathname: `${API.PRODUCT}/${itemFirst._id}/${removeVietnameseTones(itemFirst.name)}`,
                         }}
                       >
-                        {/* <button onClick={() => addToCardSame(item)}> */}
-                        <button>
+                        <button onClick={() => addToCardSame(itemFirst)}>
                           <i
                             style={{ fontSize: "28px" }}
                             className="fa fa-shopping-cart"
@@ -68,7 +77,7 @@ function HoodieFirst({ newArrHoodie }) {
                       <Link
                         style={{ color: 'black', fontWeight: '500' }}
                         to={{
-                          pathname: `${API.PRODUCT}/${itemFirst._id}`,
+                          pathname: `${API.PRODUCT}/${itemFirst._id}/${removeVietnameseTones(itemFirst.name)}`,
                         }}
                       >
                         {itemFirst.name}

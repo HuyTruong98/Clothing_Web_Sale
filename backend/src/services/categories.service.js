@@ -5,7 +5,7 @@ const Categories = require('../models/categories.models');
 const ApiError = require('../utils/ApiError');
 
 const getAllCategories = async () => {
-  const categories = await Categories.find({}).populate('category');
+  const categories = await Categories.find({}).sort({ createdAt: -1 }).populate('category');
   return categories;
 };
 /**

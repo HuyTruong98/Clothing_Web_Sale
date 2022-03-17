@@ -9,6 +9,7 @@ import DetailProduct from '../../components/ManageProducts/Detail';
 import PageColor from '../../pages/adminPage/ManageAdmin/pageColor';
 import PageOrderProduct from '../../pages/adminPage/ManageAdmin/pageOrderProduct';
 import DetailOrders from '../../components/ManageOrders/Detail';
+import PageCodeSale from '../../pages/adminPage/ManageAdmin/pageCodeSale';
 
 const routes = [
   {
@@ -73,6 +74,13 @@ const routes = [
     exact: true,
     main: ({ match, location, history }) => (
       <DetailOrders location={location} match={match} history={history} />
+    ),
+  },
+  {
+    path: URL.CODE_SALE,
+    exact: true,
+    main: ({ match, location }) => (
+      <PageCodeSale location={location} match={match} />
     ),
   },
 ];

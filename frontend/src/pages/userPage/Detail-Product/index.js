@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/alt-text */
@@ -5,15 +6,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Route, Link } from 'react-router-dom';
+import ReactImageMagnify from 'react-image-magnify';
+import { Tabs, Image } from 'antd';
 import * as URL from '../../../constants/url';
 import * as actProduct from '../../../redux/actions/managerProducts/actManageProducts';
-import { Tabs, Image } from 'antd';
-import ReactImageMagnify from 'react-image-magnify';
+import * as location from '../../../JSON/63274-loading-animation.json';
 import * as API from '../../../constants/url';
+import * as actSearchTerm from '../../../redux/actions/manageSearchTerm/actManageSearchTerm';
 import Slider from "react-slick";
 import Control_Cart from './Control-Cart';
 import Lottie from 'react-lottie';
-import * as location from '../../../JSON/63274-loading-animation.json';
 import CommentProduct from './Comment-Product';
 import ProductSeen from '../product-seen';
 import ProductSame from './Product-Same';
@@ -27,7 +29,9 @@ const defaultOptions = {
   }
 };
 const { TabPane } = Tabs;
-function DetailProduct({ match }) {
+function DetailProduct({ match, history }) {
+  // console.log(match);
+  // console.log(history.location);
   const settings = {
     dots: true,
     infinite: true,
@@ -39,8 +43,8 @@ function DetailProduct({ match }) {
   const { id } = match.params;
   const dispatch = useDispatch();
   const [selectImg, setSelectImg] = useState();
-  const productId = useSelector((state) => state.manageProducts.item);
   const [loading, setLoading] = useState(undefined);
+  const productId = useSelector((state) => state.manageProducts.item);
 
   function renderImageBig(value) {
     if (selectImg !== undefined && selectImg !== null) {
@@ -127,6 +131,7 @@ function DetailProduct({ match }) {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(actProduct.actGetProductByIdRequest(id));
+    dispatch(actSearchTerm.actSearchTermStatus({ status: true }));
     setTimeout(() => {
       setLoading(true);
     }, 1000);

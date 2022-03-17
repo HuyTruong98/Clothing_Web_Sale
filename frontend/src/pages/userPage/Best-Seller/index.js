@@ -7,7 +7,7 @@ import React from 'react';
 import SkeletonBestSeller from './SkeletonBestSeller';
 import * as API from '../../../constants/url';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
-import { renderMoney } from '../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../constants/renderConvert';
 
 function BestSeller({ listProduct }) {
   const newArr = [];
@@ -16,6 +16,16 @@ function BestSeller({ listProduct }) {
       newArr.push(itemBest);
     }
   });
+  const addToCardSame = (value) => {
+    const dataSame = JSON.parse(localStorage.getItem('CARD_SAME')) ? JSON.parse(localStorage.getItem('CARD_SAME')) : [];
+    const arr = dataSame.find((item) => item.name === value.name && item._id === value._id);
+    if (arr) {
+      console.log('Already have a product');
+    } else {
+      dataSame.push(value);
+      localStorage.setItem('CARD_SAME', JSON.stringify(dataSame));
+    }
+  }
   return (
     <div className="row">
       {
@@ -69,12 +79,11 @@ function BestSeller({ listProduct }) {
                                             <br />
                                             <Link
                                               to={{
-                                                pathname: `${API.PRODUCT}/${item._id}`,
+                                                pathname: `${API.PRODUCT}/${item._id}/${removeVietnameseTones(item.name)}`,
                                                 // id: item.id,
                                               }}
                                             >
-                                              {/* <button onClick={() => addToCardSame(item)}> */}
-                                              <button>
+                                              <button onClick={() => addToCardSame(item)}>
                                                 <i
                                                   style={{ fontSize: "23px" }}
                                                   className="fa fa-shopping-cart"
@@ -96,7 +105,7 @@ function BestSeller({ listProduct }) {
                                     <Link
                                       style={{ color: 'black' }}
                                       to={{
-                                        pathname: `${API.PRODUCT}/${item._id}`,
+                                        pathname: `${API.PRODUCT}/${item._id}/${removeVietnameseTones(item.name)}`,
                                       }}
                                     >
                                       {item.name}

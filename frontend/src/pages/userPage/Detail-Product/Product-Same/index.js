@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actProduct from '../../../../redux/actions/managerProducts/actManageProducts';
 import * as API from '../../../../constants/url';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
-import { renderMoney } from '../../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../../constants/renderConvert';
 
 function ProductSame({ productId }) {
   const dispatch = useDispatch();
@@ -60,7 +60,7 @@ function ProductSame({ productId }) {
                                     <br />
                                     <Link
                                       to={{
-                                        pathname: `${API.PRODUCT}/${item._id}`,
+                                        pathname: `${API.PRODUCT}/${item._id}/${removeVietnameseTones(item.name)}`,
                                         // id: item.id,
                                       }}
                                     >
@@ -87,7 +87,7 @@ function ProductSame({ productId }) {
                             <Link
                               style={{ color: 'black' }}
                               to={{
-                                pathname: `${API.PRODUCT}/${item._id}`,
+                                pathname: `${API.PRODUCT}/${item._id}/${removeVietnameseTones(item.name)}`,
                               }}
                             >
                               {item.name}

@@ -4,11 +4,21 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { Modal, Drawer, Space, Card, Image } from "antd";
-import { renderMoney } from '../../../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../../../constants/renderConvert';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
 import * as API from '../../../../../constants/url';
 
 function NewArrivalLast({ newArrTshirt }) {
+  const addToCardSame = (value) => {
+    const dataSame = JSON.parse(localStorage.getItem('CARD_SAME')) ? JSON.parse(localStorage.getItem('CARD_SAME')) : [];
+    const arr = dataSame.find((item) => item.name === value.name && item._id === value._id);
+    if (arr) {
+      console.log('Already have a product');
+    } else {
+      dataSame.push(value);
+      localStorage.setItem('CARD_SAME', JSON.stringify(dataSame));
+    }
+  }
   return (
     <>
       {
@@ -49,12 +59,11 @@ function NewArrivalLast({ newArrTshirt }) {
                                     <br />
                                     <Link
                                       to={{
-                                        pathname: `${API.PRODUCT}/${itemLast._id}`,
+                                        pathname: `${API.PRODUCT}/${itemLast._id}/${removeVietnameseTones(itemLast.name)}`,
                                         id: itemLast._id,
                                       }}
                                     >
-                                      {/* <button onClick={() => addToCardSame(item)}> */}
-                                      <button>
+                                      <button onClick={() => addToCardSame(itemLast)}>
                                         <i
                                           style={{ fontSize: "23px" }}
                                           class="fa fa-shopping-cart"
@@ -76,7 +85,7 @@ function NewArrivalLast({ newArrTshirt }) {
                             <Link
                               style={{ color: 'black' }}
                               to={{
-                                pathname: `${API.PRODUCT}/${itemLast._id}`,
+                                pathname: `${API.PRODUCT}/${itemLast._id}/${removeVietnameseTones(itemLast.name)}`,
                               }}
                             >
                               {itemLast.name}

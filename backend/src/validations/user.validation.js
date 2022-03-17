@@ -22,9 +22,12 @@ const updateUser = {
   }),
   body: Joi.object()
     .keys({
+      id: Joi.string(),
       email: Joi.string().email(),
       password: Joi.string().custom(password),
       name: Joi.string(),
+      image: Joi.string(),
+      role: Joi.string(),
     })
     .min(1),
 };

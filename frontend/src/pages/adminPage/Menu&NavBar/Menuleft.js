@@ -36,12 +36,11 @@ function MenuLeft({ account_current, checkToogle, colorMenu }) {
           style={{
             width: 256,
             color: "Highlight",
-            height: '130vh',
-            boxShadow: ' 0px 0px 9px 1px #666',
+            boxShadow: '0px 0px 9px 1px #666',
           }}
-          theme={`${colorMenu ? "dark" : "light "}`}
+          theme="dark"
           mode="inline"
-          collapsedWidth="100%"
+          // collapsedWidth="100%"
         >
           {account_current?.role === "admin"
             ? renderRouter(dataMenu.menuListAdmin)

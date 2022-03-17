@@ -65,9 +65,9 @@ function DetailOrders({ match, history }) {
                       }
                     }
                     // console.log(Object.fromEntries(form_data));
-                    console.log(itemList);
                     dispatch(actGetProduct.actUpdateProductRequest(form_data, itemList._id))
                     dispatch(actOrder.actUpdateOrderProductRequest(newValue, newValue._id, setInitialValue));
+                    // dispatch lên số lượng code sale để cập nhật !
                   }
                 }
               });

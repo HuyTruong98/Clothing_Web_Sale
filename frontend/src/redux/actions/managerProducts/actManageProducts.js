@@ -5,6 +5,7 @@ import callApi, { callQueryString } from '../../../constants/api';
 import * as api from '../../../constants/url';
 import * as Message from '../../../constants/Message';
 import { manageAlert } from '../../../constants/Alert';
+import { removeVietnameseTones } from '../../../constants/renderConvert';
 
 export function actFetchProductsRequest(filter) {
   return (dispatch) => {
@@ -22,6 +23,16 @@ export const actFetchProducts = (data) => {
     data,
   };
 };
+
+export function actFetchProductPaginationSearchRequest(filter, setPagi) {
+  return (dispatch) => {
+    return callApi(callQueryString(`${api.server}/products`, filter), 'GET', null).then((res) => {
+      if (res) {
+        setPagi(res.data.total);
+      };
+    });
+  }
+}
 
 export function actFetchPaginationProductRequest() {
   return (dispatch) => {

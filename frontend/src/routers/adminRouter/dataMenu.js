@@ -65,6 +65,16 @@ export const menuListAdmin = [
           },
         ],
       },
+      {
+        name: 'Quản lý code sale',
+        children: [
+          {
+            name: 'Code sale',
+            to: URL.CODE_SALE,
+            exact: true,
+          },
+        ],
+      },
     ],
   },
 ];

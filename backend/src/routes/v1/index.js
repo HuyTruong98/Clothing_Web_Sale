@@ -9,6 +9,7 @@ const slidersRoute = require('./slider.route');
 const colorRoute = require('./color.route');
 const oderListCartRoute = require('./oderProduct.route');
 const commentRoute = require('./comment.route');
+const codeSaleRoute = require('./codesale.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -51,6 +52,10 @@ const defaultRoutes = [
   {
     path: '/comment',
     route: commentRoute,
+  },
+  {
+    path: '/code-sale',
+    route: codeSaleRoute,
   },
 ];
 

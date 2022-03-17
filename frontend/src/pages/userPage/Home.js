@@ -9,14 +9,15 @@ import DealHot2 from './count-down/DealHot-2';
 import SlickImageUser from './slick-Image-user';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tabs } from 'antd';
+import { ArrowUpOutlined } from '@ant-design/icons';
 import NewArrivalTshirt from './newArrival/Tshirt-NewArrival/NewArrival';
 import NewArrivalHoodie from './newArrival/Hoodie-NewArrival/NewArrival';
 import * as actFetchProducts from '../../redux/actions/managerProducts/actManageProducts';
+import * as location from '../../JSON/63274-loading-animation.json';
 import SkeletonNewArrival from './newArrival/Skeleton-NewArrival';
 import BestSeller from './Best-Seller';
 import Banner from './Banner';
 import Lottie from 'react-lottie';
-import * as location from '../../JSON/63274-loading-animation.json';
 
 const defaultOptions = {
   loop: true,
@@ -30,7 +31,7 @@ const { TabPane } = Tabs;
 function Home({ match }) {
   const dispatch = useDispatch();
   const listProduct = useSelector((state) => state.manageProducts.list);
-  const listCategory = useSelector((state) => state.manageCategory.list);
+  const [showButton, setShowButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const [load, setLoad] = useState(undefined);
   const [filter, setFilter] = useState({
@@ -52,14 +53,14 @@ function Home({ match }) {
 
   const newArrTshirt = [];
   listProduct.filter((item) => {
-    if (item.categoryId === '61800c903202f218c8f921e0' && item.typeProductId === '61816c0b529ae973cc29e34b' && item.dealHot === '') {
+    if (item.categoryId === '61800c903202f218c8f921e0' && item.typeProductId === '61816c0b529ae973cc29e34b' && item.dealHot === '' && item.priceSale === 0) {
       newArrTshirt.push(item);
     }
   });
 
   const newArrHoodie = [];
   listProduct.filter((item) => {
-    if (item.categoryId === '61800c903202f218c8f921e0' && item.typeProductId === '6186becdb2ad9e88fcf35613' && item.dealHot === '') {
+    if (item.categoryId === '61800c903202f218c8f921e0' && item.typeProductId === '6186becdb2ad9e88fcf35613' && item.dealHot === '' && item.priceSale === 0) {
       newArrHoodie.push(item);
     }
   });
@@ -72,15 +73,36 @@ function Home({ match }) {
     }
   }
 
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setTimeout(() => {
       dispatch(actFetchProducts.actFetchProductsRequest(filter));
       setLoad(true);
     }, 1500);
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    });
   }, []);
   return (
     <>
+      {showButton && (
+        <button onClick={scrollToTop} className="back-to-top">
+          <div className="scroll-to-top-click">
+            <ArrowUpOutlined style={{ fontSize: '45px', paddingTop: '5px' }} />
+          </div>
+        </button>
+      )}
       {
         !load
           ?
@@ -178,7 +200,6 @@ function Home({ match }) {
                           <div className=" col-xl-12 col-lg-12">
                             <Tabs defaultActiveKey="2" centered>
                               <TabPane tab="SẢN PHẨM BÁN CHẠY" key="1">
-                                {/* <BestSeller newBestSeller={newBestSeller} /> */}
                                 <BestSeller listProduct={listProduct} />
                               </TabPane>
                             </Tabs>
@@ -190,6 +211,23 @@ function Home({ match }) {
                 </div>
                 <div className="section-video">
                   <Banner />
+                </div>
+                <div className="product-sale">
+                  <div className="product-sale-title">
+                    <strong>ĐANG GIẢM GIÁ</strong>
+                    <div className="tab-product-sale">
+                      <div className="container">
+                        <div className="row">
+                          <div className=" col-xl-12 col-lg-12">
+                            <Tabs defaultActiveKey="2" centered>
+                              <TabPane tab="GIẢM GIÁ" key="1">
+                              </TabPane>
+                            </Tabs>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>

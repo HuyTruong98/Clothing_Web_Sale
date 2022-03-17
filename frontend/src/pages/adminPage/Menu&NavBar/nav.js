@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useHistory } from "react-router-dom";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
-import routes from "../../../routers/adminRouter/routes";
-import * as actLoginUser from '../../../redux/actions/manageUser/actManageUsers';
-import * as URL from '../../../constants/url';
 import { Avatar, Badge, Card } from 'antd';
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { NavLink, Route, Switch, useHistory } from "react-router-dom";
+import * as URL from '../../../constants/url';
 import * as actOrder from '../../../redux/actions/manageOrderListCart/actManageOrderListCart';
-// import SwitchCommon from "./switch-common";
+import * as actLoginUser from '../../../redux/actions/manageUser/actManageUsers';
+import routes from "../../../routers/adminRouter/routes";
 
 function Nav({ account_current }) {
   const [listOrder, setListOrder] = useState([]);
-
+  const refreshToken = JSON.parse(localStorage.getItem('token'))?.token;
+  const dispatch = useDispatch();
+  const history = useHistory();
   function renderContentMenu(routes) {
     var result = null;
     if (routes.length > 0) {
@@ -31,9 +31,8 @@ function Nav({ account_current }) {
     }
     return result;
   }
-  const dispatch = useDispatch();
-  const history = useHistory();
   const logOut = () => {
+    dispatch(actLoginUser.actLogOutUserRequest({ refreshToken: refreshToken }));
     dispatch(actLoginUser.actLogOut({ status: false }));
     localStorage.removeItem('token');
     history.push(URL.LOGIN);

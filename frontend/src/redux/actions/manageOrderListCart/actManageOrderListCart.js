@@ -30,7 +30,6 @@ export function actCreateOderCartRequest(value) {
   return (dispatch) => {
     return callApi(`${api.server}/oderCart`, 'POST', value).then((res) => {
       if (res) {
-        manageAlert(Message.THEM_THANH_CONG);
       }
     });
   };

@@ -1,29 +1,35 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useState } from 'react';
 import { Menu, Dropdown, Badge, Avatar, Input } from 'antd';
 import { Button } from 'react-rainbow-components';
 import { SearchOutlined, ShoppingCartOutlined, DownOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Route, Link, NavLink } from 'react-router-dom';
+import LayoutSearch from '../../pages/userPage/Search-Product/LayoutSearch';
 import * as actUser from '../../redux/actions/manageUser/actManageUsers';
 import * as URL from '../../constants/url';
+import * as actSearchTerm from '../../redux/actions/manageSearchTerm/actManageSearchTerm';
 
 function NavUserPage({ account_current }) {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const listCart = useSelector((state) => state.manageCustomerCart.list);
+  const account = account_current.user ? account_current.user : account_current;
+  const refreshToken = JSON.parse(localStorage.getItem('token'))?.token;
 
   function logOut() {
+    dispatch(actUser.actLogOutUserRequest({ refreshToken: refreshToken }));
     dispatch(actUser.actLogOut({ status: false }));
     localStorage.removeItem('token');
     history.push(URL.HOME);
+    dispatch(actSearchTerm.actSearchTermStatus({ status: true }));
   }
 
   function renderCountCart(listCart) {
@@ -44,7 +50,7 @@ function NavUserPage({ account_current }) {
           (
             <>
               <Menu.Item key="1">
-                <NavLink to={URL.PROFILE} className="my-link">
+                <NavLink to={URL.PROFILE} className="my-link" onClick={handleOnclick}>
                   Thông tin cá nhân
                 </NavLink>
               </Menu.Item>
@@ -67,7 +73,7 @@ function NavUserPage({ account_current }) {
           (
             <>
               <Menu.Item key="1">
-                <NavLink to={URL.LOGIN} className="my-link" style={{ fontSize: '15px' }}>
+                <NavLink to={URL.LOGIN} className="my-link" onClick={handleOnclick} style={{ fontSize: '15px' }}>
                   Đăng ký / Đăng nhập
                 </NavLink>
               </Menu.Item>
@@ -77,17 +83,24 @@ function NavUserPage({ account_current }) {
     </Menu>
   );
 
+  function handleOnclick() {
+    dispatch(actSearchTerm.actSearchTermStatus({ status: true }));
+  }
   return (
     <>
       <div className="background-header"></div>
       <div className="container-fluid">
         <nav className="navbar navbar-expand-sm navbar-header">
           <div className="container">
-            <Link to={URL.HOME} className="my-link">
-              <a className="navbar-brand text-success" style={{ paddingBottom: '1px' }}>
+            <a
+              className="navbar-brand text-success"
+              style={{ paddingBottom: '1px' }}
+              onClick={handleOnclick}
+            >
+              <Link to={URL.HOME} className="my-link">
                 Geeksforgeeks
-              </a>
-            </Link>
+              </Link>
+            </a>
             <button
               className="navbar-toggler"
               type="button"
@@ -106,7 +119,7 @@ function NavUserPage({ account_current }) {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav mr-auto mt-2">
+              <ul className="navbar-nav mr-auto mt-2" onClick={handleOnclick}>
                 <Link to={URL.HOME} className="my-link">
                   <li className="nav-item active">
                     <a
@@ -129,7 +142,7 @@ function NavUserPage({ account_current }) {
                   </li>
                 </Link>
                 <Link to={URL.CONTACT} className="my-link">
-                  <li className="nav-item active">
+                  <li className="nav-item active" onClick={handleOnclick}>
                     <a
                       className="nav-link"
                     >
@@ -160,20 +173,9 @@ function NavUserPage({ account_current }) {
                 </div>
               </ul>
               <form className="form-inline">
-                <Input
-                  // value={text}
-                  // className="form-control mr-sm-2"
-                  name="search"
-                  size="large"
-                  placeholder="Tìm kiếm..."
-                  bordered
-                  suffix={<SearchOutlined />}
-                  // onChange={(e) => onChangeHandler(e.target.value)}
-                  style={{ width: 230, marginTop: '5px', marginRight: '10px' }}
-                />
-                {/* <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" /> */}
-                <Link to="/Gio-hang" activeOnlyWhenExact={false} >
-                  <a className="mr-3" type="submit">
+                <LayoutSearch />
+                <Link to={URL.CUSTOMER_CART} activeOnlyWhenExact={false}>
+                  <a className="mr-3" type="submit" onClick={handleOnclick}>
                     <Badge size="small" count={renderCountCart(listCart)} showZero>
                       <ShoppingCartOutlined style={{ color: 'white', fontSize: '25px' }} />
                     </Badge>
@@ -184,15 +186,21 @@ function NavUserPage({ account_current }) {
                   {
                     account_current.status && account_current !== null && account_current !== undefined ?
                       <Dropdown overlay={menu} arrow>
-                        <Avatar style={{ background: '#f56a00', width: '48px', height: '48px', fontSize: '20px', paddingTop: '6px' }}>
-                          {
-                            account_current.user
-                              ?
-                              account_current.user.name.slice(0, 1)
-                              :
-                              account_current.name.slice(0, 1)
-                          }
-                        </Avatar>
+                        {
+                          account.image
+                            ?
+                            <img src={`${URL.serverImg}/${account.image}`} className="rounded-circle-nav" width="100%" />
+                            :
+                            <Avatar style={{ background: '#f56a00', width: '48px', height: '48px', fontSize: '20px', paddingTop: '6px' }}>
+                              {
+                                account_current.user
+                                  ?
+                                  account_current.user.name.slice(0, 1)
+                                  :
+                                  account_current.name.slice(0, 1)
+                              }
+                            </Avatar>
+                        }
                       </Dropdown>
                       :
                       <Dropdown overlay={menu} arrow>

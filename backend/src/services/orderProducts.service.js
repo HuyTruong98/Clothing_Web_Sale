@@ -18,7 +18,7 @@ const getCountOrder = async (query) => {
 const getAllOrders = async (perPage, page, query) => {
   const count = await getCountOrder(query);
   // const orders = await OrdersProduct.find(query).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
-  const orders = await OrdersProduct.find({}).populate('order');
+  const orders = await OrdersProduct.find({}).sort({ createdAt: -1 }).populate('order');
   return { total: Math.ceil(count), data: orders };
 };
 

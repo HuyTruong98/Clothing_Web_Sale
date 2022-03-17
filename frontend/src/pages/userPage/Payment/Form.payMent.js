@@ -1,19 +1,22 @@
+/* eslint-disable no-mixed-operators */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as URL from '../../../constants/url';
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Card, Row, Col, Badge, Select, Radio, InputNumber, Collapse } from 'antd';
-import { renderMoney } from '../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../constants/renderConvert';
+import { CaretRightOutlined, SearchOutlined } from '@ant-design/icons';
 import * as API from '../../../constants/url';
 import * as actCity from '../../../redux/actions/manageCity/actManageCity';
-import { CaretRightOutlined } from '@ant-design/icons';
+import * as actCodeSale from '../../../redux/actions/manageCodeSale/actManageCodeSale';
 
-function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTransportFee, setPriceTransportFee }) {
+function FormPayment({ listCart, listColor, city, form, listCodeSale, setListCodeSale,
+  setTotalPrice, priceTransportFee, setPriceTransportFee }) {
   const { Panel } = Collapse;
   const { TextArea } = Input;
   const { Option } = Select;
@@ -24,6 +27,8 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
   const [addressDelivery, setAddressDelivery] = useState();
   const [recipientArea, setRecipientArea] = useState();
   const [methodDelivery, setMethodDelivery] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const typingTimeoutRef = useRef(null);
 
   const handleChangeWard = (value) => {
     if (value) {
@@ -86,9 +91,9 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
     let total1 = 0;
     if (listCart.length > 0) {
       for (var i = 0; i < listCart.length; i++) {
-        if (codePriceSale) {
+        if (listCodeSale.length === 1 && listCodeSale[i].quantily !== 0) {
           total1 = (total1 + (listCart[i].priceSale ? listCart[i].priceSale : listCart[i].price) * listCart[i].quantily);
-          totalAll = total1 + priceTransportFee?.total - codePriceSale;
+          totalAll = total1 + (priceTransportFee ? priceTransportFee?.total : 0) - listCodeSale[0].price;
         } else {
           total1 = (total1 + (listCart[i].priceSale ? listCart[i].priceSale : listCart[i].price) * listCart[i].quantily);
           totalAll = total1 + (priceTransportFee ? priceTransportFee?.total : 0);
@@ -128,14 +133,32 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
     dispatch(actCity.actPriceTransportFeeRequest(newValues, setPriceTransportFee));
   }
 
-  function handleCodeSale(e) {
-    if (e.target.value === 'FREESHIPWD') {
-      setCodePriceSale(20000);
-    } else if (e.target.value === 'CUSTOM-VIP-2207') {
-      setCodePriceSale(35000);
+  function onChangeCodeSale(newFilter) {
+    if (newFilter.searchTerm.length > 0 && newFilter.searchTerm.length < 3 || newFilter.searchTerm.length === 0) {
+      return;
     } else {
-      setCodePriceSale(0);
+      const filter = {
+        code: newFilter.searchTerm,
+      };
+      dispatch(actCodeSale.actFetchCodeSaleRequest(filter, setListCodeSale));
     }
+  }
+
+  function handleCodeSale(e) {
+    const value = e.target.value.toUpperCase();
+    setSearchTerm(value);
+    if (!onChangeCodeSale) return;
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      const formValue = {
+        searchTerm: value,
+      };
+      onChangeCodeSale(formValue);
+    }, 400);
   }
   return (
     <>
@@ -431,7 +454,7 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
                         <div className="name-size">
                           <Link
                             to={{
-                              pathname: `${API.PRODUCT}/${item._id}`,
+                              pathname: `${API.PRODUCT}/${item._id}/${removeVietnameseTones(item.name)}`,
                             }}
                             style={{ color: 'black' }}
                           >
@@ -501,8 +524,12 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
           <Form.Item
             name="codeSale"
           >
-            <Input size="large" placeholder="Nhập mã giảm giá.."
+            <Input
+              size="large"
+              placeholder="Nhập mã giảm giá.."
               onChange={(e) => handleCodeSale(e)}
+              suffix={<SearchOutlined />}
+              value={searchTerm}
               style={{ height: '50px', borderRadius: '5px', width: '400px' }}
             />
           </Form.Item>
@@ -533,7 +560,19 @@ function FormPayment({ listCart, listColor, city, form, setTotalPrice, priceTran
         </div>
         <div className="transport-fee">
           <p>Giảm giá :</p>
-          <p> - {renderMoney(codePriceSale)}</p>
+          {
+            listCodeSale.length === 1
+              ?
+              listCodeSale.map((item, index) => {
+                if (item.quantily !== 0 && index < 1) {
+                  return (
+                    <p>-{renderMoney(item.price)}</p>
+                  )
+                }
+              })
+              :
+              <p>-{renderMoney(0)}</p>
+          }
         </div>
         <div className="total-money">
           <p>Tổng cộng:</p>

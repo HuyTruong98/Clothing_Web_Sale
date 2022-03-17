@@ -29,7 +29,7 @@ export function actLogin(value, setLoginSuccess) {
         if (res.data.tokens.access) {
           let token = {
             id: res.data.user.id,
-            token: res.data.tokens.access.token,
+            token: res.data.tokens.refresh.token,
           };
           localStorage.setItem('token', JSON.stringify(token));
         }
@@ -65,6 +65,40 @@ export function actCreateUserRequest(value) {
     return callApi(`${api.register}`, 'POST', value).then((res) => {
       if (res) {
         manageAlert(Message.DANG_KI_THANH_CONG);
+      }
+    });
+  };
+}
+
+export function actUpdateUserRequest(id, value) {
+  return (dispatch) => {
+    return callApi(`${api.getUser}/${id}`, 'PATCH', value).then((res) => {
+      if (res) {
+        manageAlert(Message.SUA_THANH_CONG);
+        let data = {
+          ...res.data,
+          status: true,
+        };
+        dispatch(actLoginUserSuccess(data));
+      }
+    });
+  };
+}
+
+export function actForgetPassUserRequest(value) {
+  return (dispatch) => {
+    return callApi(`${api.FORGET_PASSWORD}`, 'POST', value).then((res) => {
+      if (res) {
+        manageAlert(Message.MOI_BAN_CHECK_EMAIL);
+      }
+    });
+  };
+}
+
+export function actLogOutUserRequest(value) {
+  return (dispatch) => {
+    return callApi(`${api.logout}`, 'POST', value).then((res) => {
+      if (res) {
       }
     });
   };

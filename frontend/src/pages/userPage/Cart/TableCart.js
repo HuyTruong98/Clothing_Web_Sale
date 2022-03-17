@@ -5,7 +5,7 @@ import { Image, Button, Popconfirm } from 'antd';
 import { BrowserRouter as Route, NavLink } from 'react-router-dom';
 import * as API from '../../../constants/url';
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { renderMoney } from '../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../constants/renderConvert';
 import { useDispatch } from 'react-redux';
 import * as actCart from '../../../redux/actions/manageCustomerCart/actCustomerCart';
 import * as Message from '../../../constants/Message';
@@ -46,7 +46,7 @@ function TableCart({ listCart, listColor }) {
                     <NavLink
                       style={{ color: 'black' }}
                       to={{
-                        pathname: `${API.PRODUCT}/${itemCart._id}`,
+                        pathname: `${API.PRODUCT}/${itemCart._id}/${removeVietnameseTones(itemCart.name)}`,
                       }}
                     >
                       {itemCart.name}

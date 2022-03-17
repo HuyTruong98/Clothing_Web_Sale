@@ -31,8 +31,10 @@ const upload = multer({
 
 const uploadFile = upload.array('imgUrl', 500);
 const uploadSingleFile = upload.single('imgSlider');
+const uploadSingleAvatar = upload.single('image');
 
 module.exports = {
   uploadFile,
   uploadSingleFile,
+  uploadSingleAvatar,
 };

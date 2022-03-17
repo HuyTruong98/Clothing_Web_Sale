@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-bind */
@@ -5,18 +6,31 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Spin } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import { BrowserRouter as Route, Link } from 'react-router-dom';
 import FormLogin from '../../../components/login/FormLogin';
 import ModalFormRegister from '../../../components/ManageUser/Modal';
+import ModalForgetPass from '../../../components/ManageUser/ModalForgetPass';
 import * as actLoginForm from '../../../redux/actions/manageUser/actManageUsers';
-import { BrowserRouter as Route, Link } from 'react-router-dom';
 import * as URL from '../../../constants/url';
 
 function Login() {
-  const [openModal, setOpenMadal] = useState(false);
-  const dataUser = useSelector((state) => state.manageUser.list);
-  const [form] = useForm();
   const dispatch = useDispatch();
+  const [form] = useForm();
+  const [time, setTime] = useState(false);
+  const [openModal, setOpenMadal] = useState(false);
+  const [openForgetPass, setOpenForgetPass] = useState(false);
+  const dataUser = useSelector((state) => state.manageUser.list);
+
+  function onForget(value) {
+    dispatch(actLoginForm.actForgetPassUserRequest(value));
+    setTime(true);
+    setTimeout(() => {
+      cancel();
+    }, 2200);
+  }
+
   function onFinish(value) {
     dispatch(actLoginForm.actLogin(value, setLoginSuccess));
   }
@@ -47,7 +61,14 @@ function Login() {
 
   const cancel = () => {
     setOpenMadal(false);
+    setOpenForgetPass(false);
+    setTime(false);
   };
+
+  function resetPassWord() {
+    setOpenForgetPass(true);
+  }
+
   function registerUser() {
     setOpenMadal(true);
   }
@@ -76,7 +97,7 @@ function Login() {
                 <div className="form-detail" action="#" method="post" id="myform">
                   <FormLogin onFinish={onFinish} />
                   <div className="form-register">
-                    <a>Quên Email / Mật khẩu?</a>
+                    <a onClick={() => resetPassWord()}>Quên mật khẩu?</a>
                     <br />
                     <br />
                     <br />
@@ -84,6 +105,10 @@ function Login() {
                       <span style={{ marginTop: '100px' }} className="register-arrow">Đăng ký &nbsp; <i className="fas fa-long-arrow-alt-right" /></span>
                     </a>
                   </div>
+                  {/* <StyledFirebaseAuth
+                    uiConfig={uiConfig}
+                  firebaseAuth={firebase.auth()}
+                  /> */}
                 </div>
               </div>
             </div>
@@ -95,6 +120,13 @@ function Login() {
         handleCancel={() => cancel()}
         onSave={onSave}
         form={form}
+      />
+      <ModalForgetPass
+        isVisible={openForgetPass}
+        handleCancel={() => cancel()}
+        onForget={onForget}
+        form={form}
+        time={time}
       />
     </>
   );

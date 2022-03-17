@@ -657,6 +657,16 @@ code {
 
 .rounded-circle {
   border-radius: 50% !important;
+  width: 140px;
+  height: 140px;
+  margin-top: 20px;
+}
+
+.rounded-circle-nav {
+  border-radius: 50% !important;
+  width: 48px;
+  height: 48px;
+  padding-top: 6px;
 }
 
 .ant-descriptions-item-content {
@@ -714,4 +724,34 @@ code {
 }
 .link-video a img {
   padding-top: 220px;
+}
+
+/* scroll-top-top */
+.scroll-to-top-click {
+  width: 60px;
+  height: 60px;
+}
+
+.arrow-up {
+  font-size: 30px;
+  width: 100px;
+  height: 100px;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: orange;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 5px 10px #ccc;
+  z-index: 10;
+}
+
+.back-to-top:hover {
+  background: red;
+  color: black;
 }

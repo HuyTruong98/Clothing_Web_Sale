@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { getRemainingTimeUntilMsTimestamp } from './Utils/CountdownTimerUtils';
-import { renderMoney } from '../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../constants/renderConvert';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
 import { Button, Skeleton } from 'antd';
 import * as API from '../../../constants/url';
@@ -136,7 +136,7 @@ function DealHot({ countdownTimestampMS, listProduct }) {
                     <div className="card-hot-deal-giohang">
                       <Link
                         to={{
-                          pathname: `${API.PRODUCT}/${hotDealItem._id}`,
+                          pathname: `${API.PRODUCT}/${hotDealItem._id}/${removeVietnameseTones(hotDealItem.name)}`,
                         }}
                       >
                         <Button style={{ height: "50px", border: '2px solid #ebebeb', width: '220px' }}>
@@ -160,7 +160,7 @@ function DealHot({ countdownTimestampMS, listProduct }) {
                         hotDealItem.imgProduct.map((item, index) => {
                           if (index === 0) {
                             return <Link to={{
-                              pathname: `${API.PRODUCT}/${hotDealItem._id}`,
+                              pathname: `${API.PRODUCT}/${hotDealItem._id}/${removeVietnameseTones(hotDealItem.name)}`,
                             }}><img src={`${API.serverImg}/${item.imgUrl}`} width="90%" height="100%" /></Link>;
                           }
                         })}

@@ -11,6 +11,8 @@ export const CAP_NHAT_KHO_THANH_CONG = 'Cập nhật kho thành công !';
 export const CAP_NHAT_KHO_THAT_BAI = 'Hết hàng (Vui lòng kiểm tra số lượng trong kho) !';
 export const CAP_NHAT_KHO_KHONG_DU_SO_LUONG = 'Không đủ số lượng (Vui lòng kiểm tra số lượng trong kho) 😘!';
 export const MOI_BAN_DANG_NHAP_DE_COMMENT = "Mời bạn đăng nhập để đánh giá 😘!";
+export const MOI_BAN_CHECK_EMAIL = "Mời bạn check email để thay đổi mật khẩu 😘!";
+export const PHIEN_BAN_HET_HAN_10 = "Phiên bản hết hạn trong 10 phút!";
 
 // Giỏ hàng
 export const THEM_VAO_GIO_HANG_THANH_CONG = "Thêm vào giỏ hàng thành công ❤️!";

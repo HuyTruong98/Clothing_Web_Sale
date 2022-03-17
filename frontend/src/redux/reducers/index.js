@@ -9,6 +9,7 @@ import manageSliders from './manageSliders';
 import manageColor from './manageColor';
 import manageCustomerCart from './manageCustomerCart'
 import manageOderListCart from './manageOderListCart';
+import manageSearchTerm from './manageSearchTerm';
 
 const appReducers = combineReducers({
   manageUser,
@@ -21,6 +22,7 @@ const appReducers = combineReducers({
   manageColor,
   manageCustomerCart,
   manageOderListCart,
+  manageSearchTerm,
 });
 
 export default appReducers;

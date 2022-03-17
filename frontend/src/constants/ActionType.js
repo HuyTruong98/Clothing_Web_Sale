@@ -1,7 +1,6 @@
 export const FETCH_USER = 'FETCH_USER';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
-
 // products
 export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
 export const FETCH_PAGINATION = 'FETCH_PAGINATION';
@@ -52,3 +51,6 @@ export const CREATE_ODER_CART = 'CREATE_ODER_CART';
 export const DELETE_ODER_CART = 'DELETE_ODER_CART';
 export const UPDATE_ODER_CART = 'UPDATE_ODER_CART';
 export const EDIT_ODER_CART = 'EDIT_ODER_CART';
+
+// search_term
+export const SEARCH_TERM = 'SEARCH_TERM';

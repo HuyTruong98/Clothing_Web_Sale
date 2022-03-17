@@ -1,13 +1,17 @@
+/* eslint-disable react/jsx-pascal-case */
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Avatar, Steps } from 'antd';
+import { Avatar, Steps, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { EditOutlined } from '@ant-design/icons';
+import { renderMoney } from '../../../constants/renderConvert';
 import * as actOrder from '../../../redux/actions/manageOrderListCart/actManageOrderListCart';
 import * as actCity from '../../../redux/actions/manageCity/actManageCity';
+import * as actUser from '../../../redux/actions/manageUser/actManageUsers';
 import * as ApiImg from '../../../constants/url';
-import { renderMoney } from '../../../constants/renderConvert';
+import Edit_Profile from './Edit_Profile';
 
 function Profile(props) {
   const { Step } = Steps;
@@ -16,6 +20,7 @@ function Profile(props) {
   const account_current = account.user ? account.user : account;
   const [listOrder, setListOrder] = useState([]);
   const [city, setCity] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   function showSubToTal(price, priceSale, quantily) {
     return renderMoney(priceSale !== 0 ? priceSale * quantily : price * quantily);
@@ -31,6 +36,25 @@ function Profile(props) {
     listOrder.filter((item) => item.account_current === account_current.id).map((itemOrder) => {
       dataListOrder.push(itemOrder);
     });
+  }
+
+  function openForm() {
+    setOpenModal(true);
+  }
+
+  function cancel() {
+    setOpenModal(false)
+  }
+
+  function onSave(value) {
+    const form_data = new FormData();
+    form_data.append('id', account_current.id);
+    form_data.append('email', account_current.email);
+    form_data.append('name', value.name.trim());
+    form_data.append('role', account_current.role);
+    form_data.append('image', value.image.file);
+    dispatch(actUser.actUpdateUserRequest(account_current.id, form_data))
+    cancel();
   }
 
   useEffect(() => {
@@ -54,10 +78,10 @@ function Profile(props) {
             <div className="col-md-3 col-sm-3 col-xs-12 user-profil-part pull-left">
               <div className="row">
                 <div className="col-md-12 col-md-12-sm-12 col-xs-12 user-image text-center">
-                  {account_current.img
+                  {account_current.image
                     ?
                     (
-                      <img src={account_current.img} className="rounded-circle" />
+                      <img src={`${ApiImg.serverImg}/${account_current.image}`} className="rounded-circle" width="100%" />
                     )
                     :
                     (
@@ -69,6 +93,20 @@ function Profile(props) {
                     )}
                 </div>
                 <div className="col-md-12 col-sm-12 col-xs-12 user-detail-section1 text-center">
+                  <Button
+                    onClick={() => openForm()}
+                    style={{ marginTop: '30px' }}
+                    type="link"
+                  >
+                    <EditOutlined />
+                  </Button>Chỉnh sửa Avatar
+
+                  <Edit_Profile
+                    isVisible={openModal}
+                    handleCancel={() => cancel()}
+                    onSave={onSave}
+                    account_current={account_current}
+                  />
                 </div>
               </div>
             </div>

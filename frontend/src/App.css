@@ -76,6 +76,17 @@
 }
 
 /* admin */
+/* .bg-white {
+  position: fixed;
+  right: 0;
+  left: 242px;
+  z-index: 3;
+}
+
+.card {
+  margin-top: 40px;
+} */
+
 .info-dropdown {
   color: black !important;
 }
@@ -633,6 +644,18 @@ strong {
   width: 100%;
   margin-right: 50px;
   /* margin-bottom: 10px; */
+}
+
+/* PRODUCT-SALE */
+.product-sale-title {
+  font-family: "Maven Pro", sans-serif;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.product-sale-title strong {
+  font-size: 30px;
+  font-weight: 900;
 }
 
 /* BEST SELLER */
@@ -1222,6 +1245,13 @@ p {
   margin-top: 20px;
 }
 
+.pagination-search-product {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
 /* .card-best-seller {
   margin-left: 200px;
 } */
@@ -1287,8 +1317,56 @@ p {
   font-weight: 600;
 }
 
+/* Search List */
+.search-box {
+  margin-top: 40px;
+}
+
+.page-search-title {
+  margin-bottom: 30px;
+}
+
+/* Change Password */
+.change-password {
+  padding-top: 40px;
+  width: 100%;
+  display: flex;
+}
+
+.change-pass-with-1 {
+  width: 30%;
+}
+
+.change-pass-with-2 {
+  width: 40%;
+}
+
 @media screen and (min-width: 1880px) {
   .card-best-seller {
     margin-left: 0px !important;
   }
+  .ant-menu-dark {
+    height: 130vh !important;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+}
+
+@media screen and (min-width: 1024px) {
+  .ant-menu-dark {
+    height: 200vh !important;
+  }
+}
+
+@media screen and (min-width: 320px) {
+}
+
+@media screen and (min-width: 768px) {
+}
+
+@media screen and (min-width: 992px) {
+}
+
+@media screen and (min-width: 1024px) {
 }

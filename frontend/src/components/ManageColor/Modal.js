@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 function ModalFormColor({ isVisible, handleCancel, onSave }) {
   const [form] = useForm();
   const initialValue = useSelector((state) => state.manageColor.item);
-
   useEffect(() => {
     form.resetFields();
     form.setFieldsValue(initialValue);

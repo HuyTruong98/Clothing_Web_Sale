@@ -5,7 +5,7 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import Slider from "react-slick";
-import { renderMoney } from '../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../constants/renderConvert';
 import * as API from '../../../constants/url';
 import { BrowserRouter as Link, NavLink } from "react-router-dom";
 
@@ -95,7 +95,7 @@ function ProductSeen(props) {
                               <NavLink
                                 style={{ color: 'black' }}
                                 to={{
-                                  pathname: `${API.PRODUCT}/${item._id}`,
+                                  pathname: `${API.PRODUCT}/${item._id}/${removeVietnameseTones(item.name)}`,
                                   id: item._id,
                                 }}
                               >

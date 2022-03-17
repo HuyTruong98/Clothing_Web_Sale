@@ -7,42 +7,92 @@ import { useForm } from "antd/lib/form/Form";
 import { useDispatch, useSelector } from 'react-redux';
 import * as actComment from '../../../../redux/actions/manageComment/actManageComment';
 import ListComment from './List';
-import { Button, Row } from 'antd';
+import { Button, Pagination, Row } from 'antd';
+import ModalEdit from './formEdit/ModalEdit';
 
 function CommentProduct({ productId }) {
   const [form] = useForm();
   const dispatch = useDispatch();
   const [listComments, setListComments] = useState([]);
-  const [lengthRender, setLengthRender] = useState(4);
+  const [openModal, setOpenModal] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
+  const [initialValue, setInitialValue] = useState({});
+  const [commentObject, setCommentObject] = useState({});
   const account_current = useSelector((state) => state.manageLogin.account_current);
-
-  function handleShowMore() {
-    setLengthRender(lengthRender + 4);
-  }
+  const [page, setPage] = useState();
+  const [filter, setFilter] = useState({
+    limit: 4,
+    page: 1,
+    productId: productId._id,
+  });
 
   function onSave(value) {
-    const account = account_current.user ? account_current.user : account_current;
-    const newValue = {
-      ...value,
-      accountId: account.id,
-      account_name: account.name,
-      productId: productId._id,
+    if (currentId) {
+      const account = account_current.user ? account_current.user : account_current;
+      const newValue = {
+        ...value, _id: currentId,
+        accountId: account.id,
+        account_name: account.name,
+        productId: productId._id,
+      }
+      dispatch(actComment.actUpdateCommentRequest(newValue, currentId, setCommentObject));
+    } else {
+      const account = account_current.user ? account_current.user : account_current;
+      const newValue = {
+        ...value,
+        accountId: account.id,
+        account_name: account.name,
+        productId: productId._id,
+      }
+      dispatch(actComment.actCreateCommentRequest(newValue));
+      form.setFieldsValue({
+        comment: undefined,
+        rate: undefined,
+      });
+      setFilter((filter) => ({ ...filter, page: 1 }));
     }
-    dispatch(actComment.actCreateCommentRequest(newValue));
-    form.setFieldsValue({
-      comment: undefined,
-      rate: undefined,
-    });
-    dispatch(actComment.actFetchCommentRequest(setListComments));
+    cancel();
   }
+
+  function onEdit(id) {
+    setCurrentId(id);
+    setOpenModal(true);
+    dispatch(actComment.actGetCommentByIdRequest(id, setInitialValue));
+  }
+
+  function cancel() {
+    setOpenModal(false);
+    setInitialValue(null);
+    setCurrentId(null);
+  }
+
+  function onDelete(id) {
+    dispatch(actComment.actDeleteCommentRequest(id));
+    const index = listComments.findIndex((x) => x._id === id);
+    const newArrList = [...listComments];
+    newArrList.splice(index, 1);
+    setListComments([...newArrList]);
+  }
+
+  function handleChangePagination(page, pageSize) {
+    setFilter((prevFilter) => ({ ...prevFilter, page: page }));
+  }
+
+  useEffect(() => {
+    const index = listComments.findIndex((x) => x._id === commentObject._id);
+    const newArrList = [...listComments];
+    newArrList[index] = commentObject;
+    setListComments(newArrList);
+  }, [commentObject]);
 
   useEffect(() => {
     form.resetFields();
   }, [form, dispatch, onSave]);
 
   useEffect(() => {
-    dispatch(actComment.actFetchCommentRequest(setListComments));
-  }, []);
+    dispatch(actComment.actFetchCommentRequest(filter, setListComments));
+    dispatch(actComment.actFetchPaginationCommentRequest(filter, setPage));
+  }, [filter]);
   return (
     <>
       <FormComment form={form} onSave={onSave} account_current={account_current} />
@@ -50,20 +100,22 @@ function CommentProduct({ productId }) {
         listComments={listComments}
         account_current={account_current}
         productId={productId}
-        lengthRender={lengthRender}
+        onDelete={onDelete}
+        onEdit={onEdit}
+      />
+      <ModalEdit
+        isVisible={openModal}
+        handleCancel={() => cancel()}
+        onSave={onSave}
+        initialValue={initialValue}
       />
       <Row justify="center">
-        {
-          lengthRender > listComments.length
-            ?
-            <> </>
-            :
-            <Button
-              style={{ backgroundColor: '#ffac4b', height: '40px', border: 'none', marginBottom: '30px' }}
-              onClick={() => handleShowMore()}>
-              <strong>Xem thêm đánh giá</strong>
-            </Button>
-        }
+        <Pagination
+          total={page}
+          pageSize={filter.limit}
+          current={filter.page}
+          onChange={(page, pageSize) => handleChangePagination(page, pageSize)}
+        />
       </Row>
     </>
   );

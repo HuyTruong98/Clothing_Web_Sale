@@ -5,16 +5,15 @@
 /* eslint-disable array-callback-return */
 import React from 'react';
 import { Row, Col, Modal, Card, Image, Button, Pagination } from 'antd';
-import { renderMoney } from '../../../constants/renderConvert';
+import { renderMoney, removeVietnameseTones } from '../../../constants/renderConvert';
 import SkeletonBestSeller from '../Best-Seller/SkeletonBestSeller';
 import * as API from '../../../constants/url';
 import { BrowserRouter as NavLink, Link } from "react-router-dom";
 
 function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
   function handleChangePagination(page, pageSize) {
-    setFilter((filter) => ({ ...filter, page }))
+    setFilter((filter) => ({ ...filter, page }));
   }
-
 
   const addToCardSame = (value) => {
     const dataSame = JSON.parse(localStorage.getItem('CARD_SAME')) ? JSON.parse(localStorage.getItem('CARD_SAME')) : [];
@@ -25,7 +24,7 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
       dataSame.push(value);
       localStorage.setItem('CARD_SAME', JSON.stringify(dataSame));
     }
-  }
+  };
   return (
     <>
       {
@@ -79,7 +78,7 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
                                     <br />
                                     <Link
                                       to={{
-                                        pathname: `${API.PRODUCT}/${itemProduct._id}`,
+                                        pathname: `${API.PRODUCT}/${itemProduct._id}/${removeVietnameseTones(itemProduct.name)}`,
                                         // id: item.id,
                                       }}
                                     >
@@ -105,7 +104,7 @@ function RenderProduct({ listProduct, totalPage, filter, setFilter }) {
                             <Link
                               style={{ color: 'black' }}
                               to={{
-                                pathname: `${API.PRODUCT}/${itemProduct._id}`,
+                                pathname: `${API.PRODUCT}/${itemProduct._id}/${removeVietnameseTones(itemProduct.name)}`,
                               }}
                             >
                               {itemProduct.name}

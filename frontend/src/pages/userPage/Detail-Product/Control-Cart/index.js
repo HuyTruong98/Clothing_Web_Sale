@@ -28,6 +28,21 @@ function Control_Cart({ productId }) {
     setCount(1);
   }
 
+  const unique = (arr) => {
+    return Array.from(new Set(arr))
+  }
+
+  let arrColor = productId.sizeAndColorAndNumber.map((item, index) => {
+    return item.colorProductId
+  });
+  
+  let arrColorId = []
+  listColor.map((item, index) => {
+    if (unique(arrColor).includes(item._id)) {
+      arrColorId.push(item)
+    };
+  });
+
   function addToCart(values) {
     values = {
       ...values,
@@ -90,12 +105,13 @@ function Control_Cart({ productId }) {
         >
           <Radio.Group size="middle" onChange={sizeForColor}>
             {
-              listColor.map((itemColor) => {
+              arrColorId.map((itemColor) => {
                 return (
                   <Radio.Button value={itemColor._id}>{itemColor.name}</Radio.Button>
                 );
               })
             }
+
           </Radio.Group>
         </Form.Item>
 

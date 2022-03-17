@@ -3,15 +3,19 @@ import React from 'react';
 import { List, Avatar, Comment, Rate, Popconfirm } from 'antd';
 import * as Message from '../../../../constants/Message';
 
-function ListComment({ listComments, account_current, productId, lengthRender }) {
+function ListComment({ listComments, account_current, productId, onDelete, onEdit }) {
   const account = account_current.user ? account_current.user : account_current;
+
+  function confirm(id) {
+    onDelete(id);
+  }
   return (
     <div style={{ marginTop: '30px', marginLeft: '30px' }}>
       <List
         itemLayout="horizontal"
         dataSource={listComments}
-        renderItem={(item, index) => (
-          item.productId === productId._id && index < lengthRender
+        renderItem={(item) => (
+          item.productId === productId._id
             ?
             (
               <List.Item>
@@ -26,13 +30,13 @@ function ListComment({ listComments, account_current, productId, lengthRender })
                               <Popconfirm
                                 placement="topRight"
                                 title={Message.BAN_CO_MUON_XOA}
-                                // onConfirm={() => confirm(item.id)}
+                                onConfirm={() => confirm(item._id)}
                                 okText="Yes"
                                 cancelText="No"
                               >
                                 <span >Xóa</span>
                               </Popconfirm>
-                              <span >Sửa</span>
+                              <span onClick={() => onEdit(item._id)}>Sửa</span>
                             </>
                           )
                           :

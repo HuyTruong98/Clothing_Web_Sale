@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import { Button, Modal } from 'antd';
 import FormRegister from '../login/FormRegister';
-import { useForm } from 'antd/lib/form/Form';
 
 function ModalFormRegister({ isVisible, handleCancel, onSave, form }) {
   useEffect(() => {

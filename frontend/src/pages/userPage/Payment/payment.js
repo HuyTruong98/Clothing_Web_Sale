@@ -4,18 +4,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from 'react';
-import * as URL from '../../../constants/url';
 import { BrowserRouter as Route, Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actColor from '../../../redux/actions/manageColor/actManageColor';
 import { Form } from 'antd';
 import Lottie from 'react-lottie';
 import FormPayment from './Form.payMent';
+import * as URL from '../../../constants/url';
+import * as actColor from '../../../redux/actions/manageColor/actManageColor';
 import * as location from '../../../JSON/63274-loading-animation.json';
 import * as actCity from '../../../redux/actions/manageCity/actManageCity';
 import * as actOderListCart from '../../../redux/actions/manageOrderListCart/actManageOrderListCart';
 import * as actCart from '../../../redux/actions/manageCustomerCart/actCustomerCart';
 import * as URL_SUCCESS from '../../../constants/url';
+import * as actCodeSale from '../../../redux/actions/manageCodeSale/actManageCodeSale';
 
 const defaultOptions = {
   loop: true,
@@ -36,6 +37,7 @@ function Payment() {
   const [form] = Form.useForm();
   const account = useSelector((state) => state.manageLogin.account_current);
   const [priceTransportFee, setPriceTransportFee] = useState();
+  const [listCodeSale, setListCodeSale] = useState([]);
 
   const newCart = [];
   listCart.map((item, index) => {
@@ -55,14 +57,18 @@ function Payment() {
   function onOrder(value) {
     const newValue = {
       ...value,
+      codeSale: value.codeSale.toUpperCase(),
       priceOrder: totalPrice,
       oderListCart: newCart,
       account_current: account.user ? account.user.id : account.id,
       priceTransportFee: priceTransportFee.service_fee,
       current_order: 0,
     }
+    const index = listCodeSale.findIndex((x) => x.code === newValue.codeSale);
+    listCodeSale[index].quantily = listCodeSale[index].quantily !== 0 ? listCodeSale[index].quantily - 1 : listCodeSale[index].quantily;
     dispatch(actOderListCart.actCreateOderCartRequest(newValue));
     dispatch(actCart.resetCart([]));
+    dispatch(actCodeSale.actUpdateCodeSalePayMentRequest(listCodeSale[index]._id, listCodeSale[index]));
     history.push(`${URL_SUCCESS.PAY_MENT_SUCCESS}`);
   }
 
@@ -125,6 +131,8 @@ function Payment() {
                     setTotalPrice={setTotalPrice}
                     setPriceTransportFee={setPriceTransportFee}
                     priceTransportFee={priceTransportFee}
+                    setListCodeSale={setListCodeSale}
+                    listCodeSale={listCodeSale}
                   />
                 </div>
               </Form>
